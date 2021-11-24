@@ -16,7 +16,7 @@
                     <form method="post" action="{{route('contacts.import')}}" enctype="multipart/form-data"
                           id="importContactsForm">
                         @csrf
-                        <input-file label="Chose file" id="importCSVFileContact" name="csvFile" btn-label="Upload"/>
+                        <input-file label="Choose file" id="importCSVFileContact" name="csvFile" btn-label="Upload"/>
                     </form>
                 </div>
             </div>

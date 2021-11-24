@@ -57,7 +57,6 @@ class ImportFileErrors extends Model
     ];
 
     protected $casts = [
-//        'dateOfBirth' => 'date',
         'errors' => 'array'
     ];
 
