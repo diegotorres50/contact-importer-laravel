@@ -17,14 +17,13 @@
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Nombre</th>
-                    {{--                    <th scope="col">Fecha de Nacimiento</th>--}}
-                    <th scope="col">Teléfono</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date of birth</th>
+                    <th scope="col">Phone</th>
                     <th scope="col">Email</th>
-                    <th scope="col"></th>
-                    {{--                    <th scope="col">Dirección</th>--}}
-                    {{--                    <th scope="col">Tarjeta de Crédito</th>--}}
-                    {{--                    <th scope="col">Franquicia</th>--}}
+                    <th scope="col">Address</th>
+                    <th scope="col">Credit Card</th>
+                    <th scope="col">Franchise</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,16 +33,10 @@
                         <td>{{$contact->name}}</td>
                         <td>{{$contact->phone}}</td>
                         <td>{{$contact->email}}</td>
-                        <td>
-                            <a href="{{route('contacts.show', ['contact' => $contact->id])}}"
-                            class="btn btn-primary">
-                                Ver
-                            </a>
-                        </td>
-                        {{--                        <td>{{$contact->dateOfBirth}}</td>--}}
-                        {{--                        <td>{{$contact->address}}</td>--}}
-                        {{--                        <td>{{$contact->creditCard}}</td>--}}
-                        {{--                        <td>{{$contact->franchise}}</td>--}}
+                        <td>{{$contact->dateOfBirth}}</td>
+                        <td>{{$contact->address}}</td>
+                        <td>{{$contact->creditCard}}</td>
+                        <td>{{$contact->franchise}}</td>
                     </tr>
                 @empty
                     <tr>
@@ -68,7 +61,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="contacts/create" id="importContactsForm">
+                    <form action="{{route('contacts.create')}}" id="importContactsForm">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Upload</span>
