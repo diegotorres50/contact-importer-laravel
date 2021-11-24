@@ -67,7 +67,7 @@
                                 <span class="input-group-text">Upload</span>
                             </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01" accept="text/csv">
                                 <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                             </div>
                         </div>
