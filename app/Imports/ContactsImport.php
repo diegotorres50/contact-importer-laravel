@@ -6,7 +6,6 @@ use App\Models\Contact;
 use App\Models\CsvFile;
 use App\Models\ImportFileErrors;
 use App\Models\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Jlorente\CreditCards\CreditCardValidator;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -17,7 +16,8 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 
-class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, WithValidation, SkipsOnFailure, ShouldQueue, WithChunkReading, WithUpserts
+class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, WithValidation, SkipsOnFailure, /*ShouldQueue,*/
+    WithChunkReading, WithUpserts
 {
 
     private $importedBy;
@@ -115,6 +115,24 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
         return [
             'email',
             'user_id'
+        ];
+    }
+
+
+    private function trimStr(string $str)
+    {
+        return trim($str);
+    }
+
+    public function prepareForValidation($data): array
+    {
+        return [
+            "names" => $this->trimStr($data["names"]),
+            "date_of_birth" => $this->trimStr($data["date_of_birth"]),
+            "phone" => $this->trimStr($data["phone"]),
+            "address" => $this->trimStr($data["address"]),
+            "credit_card" => $this->trimStr($data["credit_card"]),
+            "email" => $this->trimStr($data["email"]),
         ];
     }
 }

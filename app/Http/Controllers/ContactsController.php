@@ -43,9 +43,12 @@ class ContactsController extends Controller
             'url' => asset('storage/' . $destinationFolder . '/' . $fileName),
             'path' => $destination,
         ]);
-
-        \Excel::queueImport(new ContactsImport($importedBy, $csvFileUploaded), $file);
-
+        \Excel::import(new ContactsImport($importedBy, $csvFileUploaded), $file);
+        $csvFileUploaded->refresh();
+        if ($csvFileUploaded->status === CsvFile::STATUS_WAITING) {
+            $csvFileUploaded->status = CsvFile::STATUS_FINISHED;
+            $csvFileUploaded->save();
+        }
         return redirect()->route('home')
             ->with('uploading', true);
     }
