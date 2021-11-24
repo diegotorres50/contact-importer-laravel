@@ -20,6 +20,7 @@
                     <th class="border-top-0" scope="col" style="width: 180px">Credit Card</th>
                     <th class="border-top-0" scope="col" style="width: 150px">Franchise</th>
                     <th class="border-top-0" scope="col" style="width: 200px">Address</th>
+                    <th class="border-top-0" scope="col" style="width: 200px">Exceptions</th>
                 </tr>
                 </thead>
                 <tbody>
