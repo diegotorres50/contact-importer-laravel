@@ -30,7 +30,7 @@
                         <td>{{$exception->date_of_birth ?? $exception->date_of_birth->format('F jS \\of Y')}}</td>
                         <td>{{$exception->phone}}</td>
                         <td>{{$exception->email}}</td>
-                        <td>{{$exception->maskedCreditCard}}</td>
+                        <td>{{$exception->credit_card}}</td>
                         <td>{{$exception->franchise}}</td>
                         <td>{{$exception->address}}</td>
                         <td>
