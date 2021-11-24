@@ -110,7 +110,7 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
         $this->importedBy->importFileErrors()->saveMany($errors);
     }
 
-    public function uniqueBy()
+    public function uniqueBy(): array
     {
         return [
             'email',
