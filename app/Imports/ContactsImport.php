@@ -7,18 +7,19 @@ use App\Models\CsvFile;
 use App\Models\ImportFileErrors;
 use App\Models\User;
 use Jlorente\CreditCards\CreditCardValidator;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 
-class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, WithValidation, SkipsOnFailure, /*ShouldQueue,*/
-    WithChunkReading, WithUpserts
+class ContactsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure, WithUpserts
 {
+    use Importable;
+
+    private $rows = 0;
 
     private $importedBy;
     /**
@@ -44,6 +45,7 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
      */
     public function model(array $row)
     {
+        ++$this->rows;
         $franchise = $this->validator->getType($row['credit_card']);
         return new Contact([
             'name' => $row['names'],
@@ -73,18 +75,6 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
                 }
             ],
             'email' => 'required|email',
-        ];
-    }
-
-    public function chunkSize(): int
-    {
-        return 100;
-    }
-
-    public function getCsvSettings(): array
-    {
-        return [
-            'delimiter' => ';'
         ];
     }
 
@@ -118,21 +108,20 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
         ];
     }
 
-
-    private function trimStr(string $str)
-    {
-        return trim($str);
-    }
-
     public function prepareForValidation($data): array
     {
         return [
-            "names" => $this->trimStr($data["names"]),
-            "date_of_birth" => $this->trimStr($data["date_of_birth"]),
-            "phone" => $this->trimStr($data["phone"]),
-            "address" => $this->trimStr($data["address"]),
-            "credit_card" => $this->trimStr($data["credit_card"]),
-            "email" => $this->trimStr($data["email"]),
+            "names" => trim($data["names"]),
+            "date_of_birth" => trim($data["date_of_birth"]),
+            "phone" => trim($data["phone"]),
+            "address" => trim($data["address"]),
+            "credit_card" => trim($data["credit_card"]),
+            "email" => trim($data["email"]),
         ];
+    }
+
+    public function getRowCount(): int
+    {
+        return $this->rows;
     }
 }
