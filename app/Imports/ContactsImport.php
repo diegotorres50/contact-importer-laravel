@@ -13,10 +13,11 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 
-class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, WithValidation, SkipsOnFailure, ShouldQueue, WithChunkReading
+class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, WithValidation, SkipsOnFailure, ShouldQueue, WithChunkReading, WithUpserts
 {
 
     private $importedBy;
@@ -65,7 +66,7 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
             'address' => 'required',
             'credit_card' => [
                 'required',
-                function ($attr, $value, $onFailure)  {
+                function ($attr, $value, $onFailure) {
                     if (!$this->validator->isValid($value)) {
                         $onFailure('Credit card number is not valid');
                     }
@@ -109,4 +110,11 @@ class ContactsImport implements ToModel, WithCustomCsvSettings, WithHeadingRow, 
         $this->importedBy->importFileErrors()->saveMany($errors);
     }
 
+    public function uniqueBy()
+    {
+        return [
+            'email',
+            'user_id'
+        ];
+    }
 }

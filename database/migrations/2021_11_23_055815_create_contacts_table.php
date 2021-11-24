@@ -21,9 +21,11 @@ class CreateContactsTable extends Migration
             $table->string('address');
             $table->string('creditCard');
             $table->string('franchise');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
+
+            $table->unique(['email', 'user_id']);
 
             $table->foreign('user_id')
                 ->references('id')
