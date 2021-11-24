@@ -77,6 +77,15 @@
 
     <main class="py-4">
         <div class="container">
+            @if (session()->has('uploading'))
+                <div class="alert alert-info alert-dismissible fade show mb-2" role="alert">
+                    Importing contacts, this may take some time
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             @auth()
                 <ul class="nav nav-tabs nav-pills flex-column flex-sm-row">
                     <li class="nav-item">

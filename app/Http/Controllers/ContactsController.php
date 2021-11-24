@@ -47,7 +47,7 @@ class ContactsController extends Controller
         \Excel::queueImport(new ContactsImport($importedBy, $csvFileUploaded), $file);
 
         return redirect()->route('home')
-            ->with('waiting', true);
+            ->with('uploading', true);
     }
 
     public function history()
