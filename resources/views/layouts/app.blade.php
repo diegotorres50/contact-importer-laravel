@@ -77,9 +77,9 @@
 
     <main class="py-4">
         <div class="container">
-            @if (session()->has('uploading'))
+            @if (session()->has('uploading') && session()->has('row_count'))
                 <div class="alert alert-info alert-dismissible fade show mb-2" role="alert">
-                    Importing contacts, this may take some time
+                    Importing {{session()->get('row_count')}} contacts, this may take some time
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

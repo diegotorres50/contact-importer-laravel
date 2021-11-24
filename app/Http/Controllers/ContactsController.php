@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Imports\ContactsImport;
 use App\Models\CsvFile;
 use Illuminate\Http\Request;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class ContactsController extends Controller
 {
@@ -43,14 +42,16 @@ class ContactsController extends Controller
             'url' => asset('storage/' . $destinationFolder . '/' . $fileName),
             'path' => $destination,
         ]);
-        \Excel::import(new ContactsImport($importedBy, $csvFileUploaded), $file);
+        $importer = new ContactsImport($importedBy, $csvFileUploaded);
+        $importer->import($file);
         $csvFileUploaded->refresh();
         if ($csvFileUploaded->status === CsvFile::STATUS_WAITING) {
             $csvFileUploaded->status = CsvFile::STATUS_FINISHED;
             $csvFileUploaded->save();
         }
         return redirect()->route('home')
-            ->with('uploading', true);
+            ->with('uploading', true)
+            ->with('row_count', $importer->getRowCount());
     }
 
     public function history()
