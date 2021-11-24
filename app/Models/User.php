@@ -38,6 +38,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CsvFile[] $files
+ * @property-read int|null $files_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ImportFileErrors[] $importFileErrors
+ * @property-read int|null $import_file_errors_count
  */
 class User extends Authenticatable
 {
@@ -76,5 +80,14 @@ class User extends Authenticatable
     public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Contact::class);
+    }
+    public function importFileErrors(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ImportFileErrors::class);
+    }
+
+    public function files(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CsvFile::class);
     }
 }

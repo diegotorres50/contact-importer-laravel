@@ -38,24 +38,18 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
-
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest
-                        @if (Route::has('login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                        @endif
-
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -83,6 +77,26 @@
 
     <main class="py-4">
         <div class="container">
+            <ul class="nav nav-tabs nav-pills flex-column flex-sm-row">
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('home') ? 'active' : ''}}"
+                       href="{{ route('home') }}">
+                        Contact list
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('contacts.history') ? 'active' : ''}}"
+                       href="{{ route('contacts.history') }}">
+                        Import Contacts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{request()->routeIs('contacts.errors') ? 'active' : ''}}"
+                       href="{{ route('contacts.errors') }}">
+                        Errors
+                    </a>
+                </li>
+            </ul>
             @yield('content')
         </div>
     </main>

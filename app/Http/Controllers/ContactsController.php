@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ContactsImport;
+use App\Models\CsvFile;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class ContactsController extends Controller
 {
@@ -12,74 +15,52 @@ class ContactsController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        return view('contacts.index')
+        return view('contacts.list')
             ->with('contacts', $user->contacts()->paginate(5));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function import(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $request->validate([
+            'csvFile' => 'required|file|mimes:txt,csv'
+        ]);
+        $file = $request->file('csvFile');
+        $fileName = $file->getClientOriginalName();
+        $destinationFolder = 'csv/' . $request->user()->id;
+        $destination = $file->storePubliclyAs(
+            'public/' . $destinationFolder,
+            $fileName
+        );
+        $importedBy = $request->user();
+        $csvFileUploaded = $importedBy->files()->create([
+            'name' => $fileName,
+            'url' => asset('storage/' . $destinationFolder . '/' . $fileName),
+            'path' => $destination,
+        ]);
+
+        \Excel::queueImport(new ContactsImport($importedBy, $csvFileUploaded), $file);
+
+        return redirect()->route('home')
+            ->with('waiting', true);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     */
-    public function show($id)
+    public function history()
     {
         $user = \Auth::user();
-        return view('contacts.show')
-            ->with('contact', $user->contacts()->find($id));
+        return view('contacts.files')
+            ->with('files', $user->files()->paginate(5));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function errors()
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $user = \Auth::user();
+        return view('contacts.errors')
+            ->with('exceptions', $user->importFileErrors()->paginate(5));
     }
 }

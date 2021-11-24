@@ -18,9 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('contacts');
 
-Route::resource('contacts', ContactsController::class)
-    ->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\ContactsController::class, 'index'])->name('home');
+Route::get('/contacts/history', [App\Http\Controllers\ContactsController::class, 'history'])->name('contacts.history');
+Route::get('/contacts/errors', [App\Http\Controllers\ContactsController::class, 'errors'])->name('contacts.errors');
+Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'import'])->name('contacts.import');

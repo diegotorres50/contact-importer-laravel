@@ -10019,3 +10019,8 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.material-icons {
+  vertical-align: middle;
+  line-height: 0 !important;
+  font-size: 0.9rem;
+}

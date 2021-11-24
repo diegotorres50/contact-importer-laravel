@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Contact whereUserId($value)
  * @mixin \Eloquent
+ * @property-read string $masked_credit_card
+ * @method static \Database\Factories\ContactFactory factory(...$parameters)
  */
 class Contact extends Model
 {
@@ -48,7 +50,8 @@ class Contact extends Model
         'address',
         'creditCard',
         'franchise',
-        'email'
+        'email',
+        'user_id'
     ];
 
     protected $casts = [
@@ -58,5 +61,10 @@ class Contact extends Model
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getMaskedCreditCardAttribute(): string
+    {
+        return \Str::mask($this->creditCard, '*', 0, strlen($this->creditCard) - 4);
     }
 }
