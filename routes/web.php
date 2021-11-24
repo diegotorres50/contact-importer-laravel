@@ -21,7 +21,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\ContactsController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\ContactsController::class, 'index'])
+    ->middleware('auth')
+    ->name('home');
 Route::get('/contacts/history', [App\Http\Controllers\ContactsController::class, 'history'])->name('contacts.history');
 Route::get('/contacts/errors', [App\Http\Controllers\ContactsController::class, 'errors'])->name('contacts.errors');
 Route::post('/contacts', [App\Http\Controllers\ContactsController::class, 'import'])->name('contacts.import');

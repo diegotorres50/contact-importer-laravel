@@ -27,7 +27,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', 'Contact Importer') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -77,26 +77,28 @@
 
     <main class="py-4">
         <div class="container">
-            <ul class="nav nav-tabs nav-pills flex-column flex-sm-row">
-                <li class="nav-item">
-                    <a class="nav-link {{request()->routeIs('home') ? 'active' : ''}}"
-                       href="{{ route('home') }}">
-                        Contact list
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{request()->routeIs('contacts.history') ? 'active' : ''}}"
-                       href="{{ route('contacts.history') }}">
-                        Import Contacts
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{request()->routeIs('contacts.errors') ? 'active' : ''}}"
-                       href="{{ route('contacts.errors') }}">
-                        Errors
-                    </a>
-                </li>
-            </ul>
+            @auth()
+                <ul class="nav nav-tabs nav-pills flex-column flex-sm-row">
+                    <li class="nav-item">
+                        <a class="nav-link {{request()->routeIs('home') ? 'active' : ''}}"
+                           href="{{ route('home') }}">
+                            Contact list
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{request()->routeIs('contacts.history') ? 'active' : ''}}"
+                           href="{{ route('contacts.history') }}">
+                            Import Contacts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{request()->routeIs('contacts.errors') ? 'active' : ''}}"
+                           href="{{ route('contacts.errors') }}">
+                            Errors
+                        </a>
+                    </li>
+                </ul>
+            @endauth
             @yield('content')
         </div>
     </main>
